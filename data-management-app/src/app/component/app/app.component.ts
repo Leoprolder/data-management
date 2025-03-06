@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { DataViewComponent } from '../data-view/data-view.component';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 
@@ -8,7 +7,6 @@ import { MenuItem } from 'primeng/api';
     selector: 'app-root',
     imports: [
         RouterOutlet,
-        DataViewComponent,
         MenubarModule
     ],
     templateUrl: './app.component.html',

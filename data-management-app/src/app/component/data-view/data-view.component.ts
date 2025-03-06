@@ -8,5 +8,5 @@ import { Component, importProvidersFrom } from '@angular/core';
   styleUrl: './data-view.component.scss',
 })
 export class DataViewComponent {
-
+  
 }

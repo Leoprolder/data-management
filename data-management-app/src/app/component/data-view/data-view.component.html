@@ -1,1 +1,32 @@
 <h1>Отображение данных</h1>
+
+@if (data !== undefined) {
+    <p-table [value]="data.items" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header>
+            <tr>
+                <th>Дата отчета</th>
+                <th>ID отчета</th>
+                <th>Валюта</th>
+                <th>Агент</th>
+                <th>Точка продажи</th>
+                <th>Источник данных</th>
+                <th>Сторно</th>
+
+            </tr>
+        </ng-template>
+        <ng-template #body let-report>
+            <tr>
+                <td>{{ report.dateAccIn | date }}</td>
+                <td>{{ report.id }}</td>
+                <td>{{ report.currency.code }}</td>
+                <td>{{ report.agent.code }}</td>
+                <td>{{ report.pointOfSale.code }}</td>
+                <td>{{ report.dts.code }}</td>
+                <td>{{ report.storno }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+}
+@else {
+    <p-progress-spinner />
+}

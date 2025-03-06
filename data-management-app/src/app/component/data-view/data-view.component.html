@@ -1,28 +1,34 @@
 <h1>Отображение данных</h1>
 
 @if (data !== undefined) {
-    <p-table [value]="data.items" [tableStyle]="{ 'min-width': '50rem' }">
-        <ng-template #header>
-            <tr>
-                <th>Дата отчета</th>
-                <th>ID отчета</th>
-                <th>Валюта</th>
-                <th>Агент</th>
-                <th>Точка продажи</th>
-                <th>Источник данных</th>
-                <th>Сторно</th>
+    <p-fieldset>
+        
+    </p-fieldset>
 
+    <p-table
+        [value]="data.items"
+        [resizableColumns]="true"
+        [reorderableColumns]="true"
+        styleClass="p-datatable-gridlines" 
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [columns]="cols">
+        <ng-template #header let-columns>
+            <tr>
+                <th *ngFor="let col of columns" pReorderableColumn>
+                    {{col.header}}
+                </th>
             </tr>
         </ng-template>
-        <ng-template #body let-report>
+        <ng-template #body let-rowData let-columns="columns">
             <tr>
-                <td>{{ report.dateAccIn | date }}</td>
-                <td>{{ report.id }}</td>
-                <td>{{ report.currency.code }}</td>
-                <td>{{ report.agent.code }}</td>
-                <td>{{ report.pointOfSale.code }}</td>
-                <td>{{ report.dts.code }}</td>
-                <td>{{ report.storno }}</td>
+                <td *ngFor="let col of columns">
+                    @if (isDate(getRowValue(rowData, col.field))) {
+                        {{ getRowValue(rowData, col.field) | date:'dd.MM.yyyy' }}
+                    }
+                    @else {
+                        {{ getRowValue(rowData, col.field) }}
+                    }
+                </td>
             </tr>
         </ng-template>
     </p-table>

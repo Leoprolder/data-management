@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Agent } from '../../models/agent';
 import { SaleReportResponse } from '../../models/sale-report-response';
-import { delay, Observable } from 'rxjs';
+import { delay, map, Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +14,8 @@ export class DataService {
 
     public getAgents(): Observable<Agent[]> {
         return this._httpClient.get<Agent[]>('/assets/agents.json').pipe(
-            delay(1500)
+            delay(1500),
+            map((x: any) => x['agents'] as Agent[])
         );
     }
 

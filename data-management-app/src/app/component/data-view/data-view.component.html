@@ -1,37 +1,72 @@
 <h1>Отображение данных</h1>
 
 @if (data !== undefined) {
-    <p-fieldset>
-        
-    </p-fieldset>
+    <div class="card">
+        <p-datepicker
+            [iconDisplay]="'input'" [showIcon]="true"
+            [(ngModel)]="filter.rangeDates"
+            selectionMode="range"
+            [readonlyInput]="true"
+            placeholder="Временной интервал"
+            (ngModelChange)="applyFilter()">
+        </p-datepicker>
 
-    <p-table
-        [value]="data.items"
-        [resizableColumns]="true"
-        [reorderableColumns]="true"
-        styleClass="p-datatable-gridlines" 
-        [tableStyle]="{ 'min-width': '50rem' }"
-        [columns]="cols">
-        <ng-template #header let-columns>
-            <tr>
-                <th *ngFor="let col of columns" pReorderableColumn>
-                    {{col.header}}
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template #body let-rowData let-columns="columns">
-            <tr>
-                <td *ngFor="let col of columns">
-                    @if (isDate(getRowValue(rowData, col.field))) {
-                        {{ getRowValue(rowData, col.field) | date:'dd.MM.yyyy' }}
-                    }
-                    @else {
-                        {{ getRowValue(rowData, col.field) }}
-                    }
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+        <input
+            pInputText
+            [(ngModel)]="filter.pointOfSale"
+            autocomplete="off"
+            placeholder="Точка продажи"
+            (change)="applyFilter()" />
+
+        <p-select
+            [options]="agents$.value"
+            [(ngModel)]="filter.agent"
+            optionLabel="name"
+            placeholder="Агент"
+            (ngModelChange)="applyFilter()"/>
+
+        <p-select
+            [options]="dts"
+            [(ngModel)]="filter.dts"
+            placeholder="Источник данных"
+            (ngModelChange)="applyFilter()"/>
+
+        <button pButton type="button" label="Сбросить фильтры" (click)="resetFilter()"></button>
+    </div>
+
+    
+    @if(!!filteredData && !!filteredData.items) {
+        <p-table
+            [value]="filteredData.items"
+            [resizableColumns]="true"
+            [reorderableColumns]="true"
+            styleClass="p-datatable-gridlines" 
+            [tableStyle]="{ 'min-width': '50rem' }"
+            [columns]="cols">
+            <ng-template #header let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" pReorderableColumn>
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-rowData let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns">
+                        @if (isDate(getRowValue(rowData, col.field))) {
+                            {{ getRowValue(rowData, col.field) | date:'dd.MM.yyyy' }}
+                        }
+                        @else {
+                            {{ getRowValue(rowData, col.field) }}
+                        }
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    }
+    @else {
+        <p>Нет данных</p>
+    }
 }
 @else {
     <p-progress-spinner />

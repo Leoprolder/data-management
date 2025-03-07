@@ -1,8 +1,18 @@
 <h1>Отчёт</h1>
 
 @if (data === undefined) {
-
+    <p-progress-spinner></p-progress-spinner>
 }
 @else {
+    <p-datepicker
+        [iconDisplay]="'input'" [showIcon]="true"
+        [(ngModel)]="dateRange"
+        selectionMode="range"
+        [readonlyInput]="true"
+        placeholder="Временной интервал"
+        (ngModelChange)="initChart()">
+    </p-datepicker>
+    <button pButton type="button" label="Сбросить" (click)="dateRange = []; initChart()"></button>
+        
     <p-chart type="bar" [data]="chartData" [options]="options" />
 }

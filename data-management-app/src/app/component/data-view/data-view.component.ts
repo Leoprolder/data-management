@@ -151,7 +151,7 @@ export class DataViewComponent implements OnInit {
             this.filteredData.items = this.filteredData.items
                 .filter(x => {
                     const date = new Date(x.dateAccIn);
-                    return date >= this.filter.rangeDates[0] && date <= this.filter.rangeDates[1];
+                    return date >= this.filter.rangeDates[0] || date <= this.filter.rangeDates[1];
                 })
         }
     }

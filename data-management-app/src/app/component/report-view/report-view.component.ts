@@ -3,6 +3,9 @@ import { DataService } from '../../service/data/data.service';
 import { ChartModule } from 'primeng/chart';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SaleReportResponse } from '../../models/sale-report-response';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 
 interface GroupedData {
     date: Date;
@@ -13,7 +16,10 @@ interface GroupedData {
     selector: 'app-report-view',
     imports: [
         DatePickerModule,
-        ChartModule
+        ChartModule,
+        ProgressSpinnerModule,
+        FormsModule,
+        ButtonModule
     ],
     templateUrl: './report-view.component.html',
     styleUrl: './report-view.component.scss'
@@ -23,6 +29,7 @@ export class ReportViewComponent implements OnInit {
     public chartData: any;
     public options: any;
     public filteredData: SaleReportResponse | undefined;
+    public dateRange: Date[] = [];
 
     constructor(private _dataService: DataService) { }
 
@@ -35,7 +42,7 @@ export class ReportViewComponent implements OnInit {
         });
     }
 
-    initChart() {
+    public initChart() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--p-text-color');
         const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
@@ -52,7 +59,7 @@ export class ReportViewComponent implements OnInit {
                     backgroundColor: groupedData.map(x =>
                         `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`
                     ),
-                    borderColor: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`,
+                    borderColor: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.8)`,
                     borderWidth: 1,
                 },
             ],
@@ -90,9 +97,13 @@ export class ReportViewComponent implements OnInit {
 
     private _getGroupedData(): GroupedData[] {
         let groupedData: GroupedData[] = [];
-        const items = (this.data as SaleReportResponse).items;
-        for (let i = 0; i < items.length; i++) {
-            let report = items[i];
+        let items = (this.data as SaleReportResponse).items;
+        const filteredItems = !!this.dateRange.length
+            ? items.filter(x => new Date(x.dateAccIn) >= this.dateRange[0] || new Date(x.dateAccIn) <= this.dateRange[1])
+            : items;
+
+        for (let i = 0; i < filteredItems.length; i++) {
+            let report = filteredItems[i];
             let reportDate = new Date(report.dateAccIn);
 
             let normalizedDate = new Date(reportDate.getFullYear(), reportDate.getMonth(), reportDate.getDate());
